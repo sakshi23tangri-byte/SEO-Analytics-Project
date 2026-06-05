@@ -1,0 +1,138 @@
+CREATE DATABASE seo_project;
+
+CREATE TABLE keyword_lookup (
+    keyword TEXT,
+    keyword_id INT
+);
+
+CREATE TABLE main_traffic_data (
+    keyword TEXT,
+    keyword_id TEXT,
+    position TEXT,
+    previous_position TEXT,
+    search_volume TEXT,
+    keyword_difficulty TEXT,
+    cpc TEXT,
+    traffic TEXT,
+    traffic_percent TEXT,
+    traffic_cost TEXT,
+    competition TEXT,
+    number_of_results TEXT,
+    trends TEXT,
+    timestamp TEXT,
+    serp_feature_keyword TEXT,
+    keyword_intents TEXT,
+    position_type TEXT
+);
+
+CREATE TABLE search_volume_lookup (
+    keyword_id TEXT,
+    search_volume TEXT
+);
+
+CREATE TABLE traffic_lookup (
+    keyword_id TEXT,
+    traffic TEXT,
+    traffic_percent TEXT
+);
+
+CREATE TABLE cpc_lookup (
+    keyword_id TEXT,
+    cpc TEXT
+);
+
+-- Count Total Keywords
+SELECT COUNT(*) AS total_keywords
+FROM main_traffic_data;
+
+-- Top 10 Keywords by Search Volume
+SELECT keyword, search_volume
+FROM main_traffic_data
+ORDER BY search_volume DESC
+LIMIT 10;
+
+--Top Keywords by Traffic
+SELECT keyword, traffic
+FROM main_traffic_data
+ORDER BY traffic DESC
+LIMIT 10;
+
+--Highest cpc
+SELECT keyword, cpc
+FROM main_traffic_data
+ORDER BY cpc DESC
+LIMIT 10;
+
+-- Keywords With Best Rankings
+SELECT keyword, position
+FROM main_traffic_data
+WHERE position IS NOT NULL
+ORDER BY position ASC
+LIMIT 20;
+
+--Ranking Improvement Analysis
+SELECT
+    keyword,
+    previous_position,
+    position,
+    (previous_position - position) AS improvement
+FROM main_traffic_data
+WHERE previous_position IS NOT NULL
+AND position IS NOT NULL
+ORDER BY improvement DESC
+
+--High Traffic + Low Competition Keywords
+SELECT keyword, traffic, competition
+FROM main_traffic_data
+WHERE competition < 0.3
+ORDER BY traffic DESC
+
+--average cpc
+SELECT AVG(cpc) AS average_cpc
+
+--average keyword difficulty
+SELECT AVG(keyword_difficulty) AS avg_keyword_difficulty
+
+--Keywords With SERP Features
+SELECT keyword, serp_feature_keyword
+FROM main_traffic_data
+
+--intent based analysis
+SELECT keyword_intents, COUNT(*) AS total_keywords
+FROM main_traffic_data
+GROUP BY keyword_intents
+ORDER BY total_keywords DESC;
+
+--traffic cost analysis
+SELECT keyword, traffic_cost
+FROM main_traffic_data
+ORDER BY traffic_cost DESC;
+
+--keyword difficulty vs traffic
+SELECT keyword, keyword_difficulty, traffic
+FROM main_traffic_data
+WHERE keyword_difficulty < 40
+ORDER BY traffic DESC;
+
+--duplicate keyword check
+SELECT keyword, COUNT(*)
+FROM main_traffic_data
+GROUP BY keyword
+HAVING COUNT(*) > 1;
+
+--top keyword groups by seach volume
+SELECT keyword_id, SUM(search_volume) AS total_volume
+FROM main_traffic_data
+GROUP BY keyword_id
+ORDER BY total_volume DESC
+LIMIT 20;
+
+LIMIT 20;
+LIMIT 20;
+WHERE serp_feature_keyword IS NOT NULL;
+
+
+FROM main_traffic_data;
+FROM main_traffic_data;
+LIMIT 20;
+LIMIT 20;
